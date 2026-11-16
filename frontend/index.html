@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Academic blood donation management system demonstration.">
+  <title>Blood Donation Management System</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="#dashboard"><span class="brand-icon">✚</span><span>Life<span class="brand-light">Link</span></span></a>
+    <p class="nav-label">WORKSPACE</p>
+    <nav>
+      <a class="nav-link active" href="#dashboard">▦ <span>Dashboard</span></a>
+      <a class="nav-link" href="#donors">♙ <span>Donors</span></a>
+      <a class="nav-link" href="#requests">♡ <span>Blood requests</span></a>
+      <a class="nav-link" href="#inventory">▤ <span>Blood inventory</span></a>
+    </nav>
+    <div class="sidebar-note">
+      <span class="note-icon">♥</span>
+      <strong>Every donation matters</strong>
+      <p>A simple way to organize donor information and blood requests.</p>
+    </div>
+    <div class="sidebar-footer">Academic project demonstration</div>
+  </aside>
+
+  <main class="main-content">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">BLOOD DONATION MANAGEMENT</p>
+        <h1 id="pageTitle">Dashboard</h1>
+      </div>
+      <div class="top-actions">
+        <span class="system-status"><i></i> <span id="apiStatus">Checking system...</span></span>
+        <span class="avatar">A</span>
+      </div>
+    </header>
+
+    <section id="dashboard" class="page-section">
+      <div class="welcome-panel">
+        <div>
+          <p class="eyebrow light">WELCOME TO LIFELINK</p>
+          <h2>Manage donations.<br>Support your community.</h2>
+          <p>Keep donor records, review blood requests and monitor the sample inventory in one place.</p>
+          <a class="button button-white" href="#donors">Register a donor <span>→</span></a>
+        </div>
+        <div class="welcome-art" aria-hidden="true"><div class="heart">♥</div><span class="pulse pulse-one"></span><span class="pulse pulse-two"></span></div>
+      </div>
+
+      <div class="stats-grid">
+        <article class="stat-card"><div class="stat-top"><span>Total donors</span><span class="stat-icon red">♙</span></div><strong id="totalDonors">0</strong><small>Registered donor records</small></article>
+        <article class="stat-card"><div class="stat-top"><span>Blood requests</span><span class="stat-icon purple">♡</span></div><strong id="totalRequests">0</strong><small>Requests submitted</small></article>
+        <article class="stat-card"><div class="stat-top"><span>Pending requests</span><span class="stat-icon orange">◷</span></div><strong id="pendingRequests">0</strong><small>Awaiting review</small></article>
+        <article class="stat-card"><div class="stat-top"><span>Inventory units</span><span class="stat-icon green">▤</span></div><strong id="totalUnits">0</strong><small>Sample units recorded</small></article>
+      </div>
+
+      <div class="content-grid">
+        <article class="panel">
+          <div class="panel-heading"><div><h3>Blood inventory overview</h3><p>Recorded units by blood group</p></div><a href="#inventory" class="text-link">Manage inventory →</a></div>
+          <div id="dashboardInventory" class="mini-inventory"><p class="muted">Loading inventory...</p></div>
+        </article>
+        <article class="panel">
+          <div class="panel-heading"><div><h3>Quick actions</h3><p>Common management tasks</p></div></div>
+          <div class="quick-actions">
+            <a href="#donors" class="quick-action"><span class="quick-icon red">＋</span><span><strong>Register donor</strong><small>Add a donor record</small></span><b>→</b></a>
+            <a href="#requests" class="quick-action"><span class="quick-icon purple">♡</span><span><strong>New blood request</strong><small>Record a request</small></span><b>→</b></a>
+            <a href="#inventory" class="quick-action"><span class="quick-icon green">▤</span><span><strong>Update inventory</strong><small>Adjust recorded units</small></span><b>→</b></a>
+          </div>
+        </article>
+      </div>
+      <p class="disclaimer">Demonstration only: this application is an academic software project. It is not a clinical blood-bank system. Do not use its records to make medical or transfusion decisions.</p>
+    </section>
+
+    <section id="donors" class="page-section hidden">
+      <div class="section-intro"><div><h2>Donor management</h2><p>Register donors and review the saved donor records.</p></div></div>
+      <div class="content-grid form-layout">
+        <article class="panel">
+          <div class="panel-heading"><div><h3>Register a donor</h3><p>Enter the donor's basic details.</p></div></div>
+          <form id="donorForm" class="form-grid">
+            <label class="full">Full name *<input name="full_name" required maxlength="100" placeholder="Enter full name"></label>
+            <label>Phone number *<input name="phone" required maxlength="25" placeholder="+250..."></label>
+            <label>Email address<input name="email" type="email" placeholder="name@example.com"></label>
+            <label>Blood group *<select name="blood_group" required class="blood-options"></select></label>
+            <label>Gender<select name="gender"><option value="">Select gender</option><option>Female</option><option>Male</option><option>Other</option></select></label>
+            <label>Date of birth<input name="date_of_birth" type="date"></label>
+            <label class="full">Address<input name="address" maxlength="255" placeholder="District, sector or area"></label>
+            <div class="full form-footer"><button class="button button-primary" type="submit">Save donor</button><span class="form-message" id="donorMessage" role="status"></span></div>
+          </form>
+        </article>
+        <article class="panel info-panel"><span class="info-symbol">♥</span><h3>Thank you for giving</h3><p>Keep donor details accurate and handle personal information responsibly. Only collect details needed for your approved demonstration.</p></article>
+      </div>
+      <article class="panel table-panel">
+        <div class="panel-heading"><div><h3>Registered donors</h3><p>Donor records saved in the database</p></div><button class="button button-outline" id="refreshDonors">Refresh</button></div>
+        <div class="table-wrap"><table><thead><tr><th>Name</th><th>Blood group</th><th>Phone</th><th>Email</th><th>Registered</th><th>Action</th></tr></thead><tbody id="donorsTable"><tr><td colspan="6" class="empty">Loading donors...</td></tr></tbody></table></div>
+      </article>
+    </section>
+
+    <section id="requests" class="page-section hidden">
+      <div class="section-intro"><div><h2>Blood requests</h2><p>Record and track demonstration blood requests.</p></div></div>
+      <article class="panel">
+        <div class="panel-heading"><div><h3>Submit a request</h3><p>Enter the patient and hospital contact information.</p></div></div>
+        <form id="requestForm" class="form-grid">
+          <label>Patient name *<input name="patient_name" required maxlength="100"></label>
+          <label>Hospital / facility *<input name="hospital_name" required maxlength="150"></label>
+          <label>Contact phone *<input name="contact_phone" required maxlength="25"></label>
+          <label>Blood group *<select name="blood_group" required class="blood-options"></select></label>
+          <label>Units requested *<input name="units_requested" type="number" min="1" step="1" required></label>
+          <label>Urgency<select name="urgency"><option>Low</option><option selected>Medium</option><option>High</option><option>Emergency</option></select></label>
+          <div class="full form-footer"><button class="button button-primary" type="submit">Submit request</button><span class="form-message" id="requestMessage" role="status"></span></div>
+        </form>
+      </article>
+      <article class="panel table-panel">
+        <div class="panel-heading"><div><h3>Request records</h3><p>Update the status as part of your demonstration.</p></div><button class="button button-outline" id="refreshRequests">Refresh</button></div>
+        <div class="table-wrap"><table><thead><tr><th>Patient</th><th>Facility</th><th>Blood</th><th>Units</th><th>Urgency</th><th>Status</th><th>Update</th></tr></thead><tbody id="requestsTable"><tr><td colspan="7" class="empty">Loading requests...</td></tr></tbody></table></div>
+      </article>
+    </section>
+
+    <section id="inventory" class="page-section hidden">
+      <div class="section-intro"><div><h2>Blood inventory</h2><p>View and edit the sample number of units recorded for each blood group.</p></div></div>
+      <article class="panel">
+        <div class="panel-heading"><div><h3>Inventory by blood group</h3><p>Enter the current demonstration value and save.</p></div><button class="button button-outline" id="refreshInventory">Refresh</button></div>
+        <div class="inventory-grid" id="inventoryGrid"><p class="muted">Loading inventory...</p></div>
+      </article>
+      <p class="disclaimer">Inventory values are manually entered demonstration data, not verified blood availability. This application does not determine donor eligibility, compatibility or clinical suitability.</p>
+    </section>
+    <footer class="main-footer">LifeLink · Blood Donation Management System · Academic project</footer>
+  </main>
+  <div id="toast" class="toast" role="status"></div>
+  <script src="script.js"></script>
+</body>
+</html>
